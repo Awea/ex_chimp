@@ -11,8 +11,8 @@ defmodule ExChimp.Mixfile do
      description: @description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps,
-     package: package,
+     deps: deps(),
+     package: package(),
      # Docs
      name: "ExChimp",
      docs: [source_ref: "v#{@version}",

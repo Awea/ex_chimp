@@ -48,6 +48,16 @@ defmodule ExChimp.List do
     |> do_add_member(list_id)
   end
 
+  @spec remove_member(String.t, String.t) :: {:ok, Map.t} | {:error, String.t}
+  def remove_member(list_id, email) do
+    hashed_email = :crypto.hash(:md5, email) |> Base.encode16(case: :lower)
+
+    case Client.delete("lists/#{list_id}/members/#{hashed_email}") do
+      {:ok, %{body: %{"detail" => error}}} -> {:error, error}
+      {:ok, %{body: body}}                 -> {:ok, body} 
+    end
+  end
+
   defp do_add_member(data, list_id) do
     case Client.post("lists/#{list_id}/members", data) do
       {:ok, %{body: %{"status" => 400, "detail" => error}}} -> {:error, error}
